@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import styled, { css, keyframes } from '@xstyled/styled-components'
 import {
   brightSun,
