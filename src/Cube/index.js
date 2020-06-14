@@ -11,7 +11,15 @@ let previousMousePosition = {
   y: 0,
 }
 
-function Cube({ height, width, color, hint, coordinates, offset, cx }) {
+function Cube({
+  height,
+  width,
+  color,
+  hint,
+  coordinates = [],
+  offset = [],
+  cx = [],
+}) {
   const [anim, setAnim] = useState()
   const [isDraggable, setDrag] = useState()
   const [destroyed, destroy] = useState()
@@ -98,12 +106,6 @@ function Cube({ height, width, color, hint, coordinates, offset, cx }) {
       const shiftX = e.clientX - initialX
       const shiftY = e.clientY - initialY
       let indexOfClosestSlot = undefined
-
-      console.log('page', e.pageX, e.pageY)
-      console.log('client', e.clientX, e.clientY)
-      console.log('shifted', e.pageX - shiftX, e.pageY - shiftY)
-      console.log('content', cx[0], cx[1])
-      console.log('cube', cube.getBoundingClientRect())
 
       moveAt(e.pageX - shiftX - cx[0], e.pageY - shiftY - cx[1])
       const slots = document.getElementsByName('slot')

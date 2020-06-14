@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react'
 import styled from '@xstyled/styled-components'
 import Cube from './Cube'
 import Slot from './Slot'
+import Works from './Works'
 import * as colors from './colors'
 
 const shades = [
@@ -21,18 +22,23 @@ const Container = styled.div`
   width: 100vw;
   background-color: ${colors.dew};
 `
-const Content = styled.div`
-  height: 500px;
-  width: 500px;
+const Content = styled.div.attrs(({ shouldReveal }) => ({
+  style: {
+    backgroundColor: shouldReveal ? colors.pastel : colors.indigo,
+    height: shouldReveal ? '800px' : '500px',
+    width: shouldReveal ? '800px' : '500px',
+    justifyContent: shouldReveal ? 'flex-start' : 'center',
+    alignItems: shouldReveal ? 'flex-start' : 'center',
+  },
+}))`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${colors.indigo};
+  transition: height 500ms ease-in, width 500ms ease-in,
+    background-color 500ms ease-in;
 `
 
 const hints = ['🚪', '🗝', '🤏']
 
-const NB = 2
+const NB = 10
 
 function getRandomIndex(indexes = []) {
   if (indexes.length <= 2) {
@@ -105,64 +111,79 @@ function App() {
     }
   }
 
+  const shouldReveal = hintsFound.length === 3
   return (
     <Container>
-      <Content ref={ref} style={{ position: 'relative' }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: '-115px',
-            width: '200px',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          {Array.from({ length: hints.length }).map((_, index) => (
-            <Slot
-              key={hints[index]}
-              hint={hints[index]}
-              hintsFound={hintsFound}
-              addFoundHint={addFoundHint}
-            />
-          ))}
-        </div>
-        <div style={{ width: '300px', height: '300px', padding: '0px' }}>
-          {ref.current
-            ? Array.from({ length: NB }).map((_, rowIndex) => {
-                const height = Math.round(percentage(10, dimension.height))
-                const width = Math.round(percentage(10, dimension.width))
-                return (
-                  <div
-                    key={rowIndex}
-                    style={{
-                      display: 'flex',
-                      height: height,
-                    }}
-                  >
-                    {Array.from({ length: NB }).map((_, index) => {
-                      const hintIndex = indexes.findIndex(
-                        ([r, c]) => r === rowIndex && c === index
-                      )
-                      const hint = hintIndex > -1 ? hints[hintIndex] : undefined
-                      const { left, top } = ref.current.getBoundingClientRect()
-                      return (
-                        <Cube
-                          key={`${rowIndex}-${index}`}
-                          width={width}
-                          height={height}
-                          color={determineColor(rowIndex, index)}
-                          hint={hint}
-                          coordinates={[rowIndex, index]}
-                          offset={[100, 100]}
-                          cx={[left, top]}
-                        />
-                      )
-                    })}
-                  </div>
-                )
-              })
-            : null}
-        </div>
+      <Content
+        ref={ref}
+        style={{ position: 'relative' }}
+        shouldReveal={shouldReveal}
+      >
+        {shouldReveal ? (
+          <Works />
+        ) : (
+          <>
+            <div
+              style={{
+                position: 'absolute',
+                top: '-115px',
+                width: '200px',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              {Array.from({ length: hints.length }).map((_, index) => (
+                <Slot
+                  key={hints[index]}
+                  hint={hints[index]}
+                  hintsFound={hintsFound}
+                  addFoundHint={addFoundHint}
+                />
+              ))}
+            </div>
+            <div style={{ width: '300px', height: '300px', padding: '0px' }}>
+              {ref.current
+                ? Array.from({ length: NB }).map((_, rowIndex) => {
+                    const height = Math.round(percentage(10, dimension.height))
+                    const width = Math.round(percentage(10, dimension.width))
+                    return (
+                      <div
+                        key={rowIndex}
+                        style={{
+                          display: 'flex',
+                          height: height,
+                        }}
+                      >
+                        {Array.from({ length: NB }).map((_, index) => {
+                          const hintIndex = indexes.findIndex(
+                            ([r, c]) => r === rowIndex && c === index
+                          )
+                          const hint =
+                            hintIndex > -1 ? hints[hintIndex] : undefined
+                          const {
+                            left,
+                            top,
+                          } = ref.current.getBoundingClientRect()
+                          return (
+                            <Cube
+                              key={`${rowIndex}-${index}`}
+                              width={width}
+                              height={height}
+                              color={determineColor(rowIndex, index)}
+                              hint={hint}
+                              coordinates={[rowIndex, index]}
+                              offset={[100, 100]}
+                              cx={[left, top]}
+                            />
+                          )
+                        })}
+                      </div>
+                    )
+                  })
+                : null}
+            </div>
+          </>
+        )}
       </Content>
     </Container>
   )
