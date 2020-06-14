@@ -1,7 +1,4 @@
-/** @jsx jsx */
-
-import { useState, useMemo, useEffect, useRef } from 'react'
-import { jsx } from '@xstyled/emotion'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import styled from '@xstyled/styled-components'
 import Cube from './Cube'
 import Slot from './Slot'
@@ -56,18 +53,11 @@ function App() {
     width: window.innerWidth,
     height: window.innerHeight,
   })
-  const [hasHintFound, setFoundHint] = useState()
+  const [hintsFound, addFoundHint] = useState([])
 
   const ref = useRef()
 
   const indexes = useMemo(getRandomIndex, [getRandomIndex])
-  // function resize(e = {}) {
-  //   const { currentTarget: { innerWidth, innerHeight } = {} } = e
-  //   setDimension({
-  //     width: innerWidth,
-  //     height: innerHeight,
-  //   })
-  // }
 
   useEffect(() => {
     if (ref.current) {
@@ -76,7 +66,6 @@ function App() {
         height: 300,
       })
     }
-    // window.addEventListener('resize', resize)
   }, [])
 
   function percentage(percent, value) {
@@ -128,9 +117,14 @@ function App() {
             justifyContent: 'space-between',
           }}
         >
-          <Slot />
-          <Slot />
-          <Slot />
+          {Array.from({ length: hints.length }).map((_, index) => (
+            <Slot
+              key={hints[index]}
+              hint={hints[index]}
+              hintsFound={hintsFound}
+              addFoundHint={addFoundHint}
+            />
+          ))}
         </div>
         <div style={{ width: '300px', height: '300px', padding: '0px' }}>
           {ref.current
@@ -139,6 +133,7 @@ function App() {
                 const width = Math.round(percentage(10, dimension.width))
                 return (
                   <div
+                    key={rowIndex}
                     style={{
                       display: 'flex',
                       height: height,

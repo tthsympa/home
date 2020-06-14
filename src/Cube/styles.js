@@ -59,6 +59,21 @@ const animations = {
       z-index: 1000;
     }
   `,
+  destroyed: keyframes`
+  0% {
+    transform: ${animationsLastState.found};
+    opacity: 1;
+  }
+  85% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+    display: none;
+    visibility: hidden;
+    pointer-events: none;
+  }
+`,
 }
 
 const Front = styled.div`
@@ -92,7 +107,7 @@ const Container = styled.div`
   width: ${(props) => props.width}px;
   margin: 0 auto;
   transform-style: preserve-3d;
-  transition: transform 550ms ease, opacity 300ms ease;
+  transition: transform 550ms ease, opacity 1000ms ease-out;
   transform: perspective(250px) rotateX(0deg) rotateY(0deg) translateY(0px);
   opacity: 1;
   user-select: none;
@@ -117,6 +132,12 @@ const Container = styled.div`
       :focus {
         transform: translate3d(-4px, -2px, 0);
       }
+    `}
+  ${(props) =>
+    props.destroyed &&
+    css`
+      opacity: 0;
+      pointer-events: none;
     `}
 `
 

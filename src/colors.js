@@ -8,3 +8,7 @@ export const brightSun = '#FCCA46'
 
 export const dew = '#EEFFFF'
 export const indigo = '#545dc782'
+export const lightGreen = '#84DD63'
+export const grannyApple = '#BDEDAB'
+export const roseMader = '#DB2B39'
+export const pastel = '#F0A8AE'

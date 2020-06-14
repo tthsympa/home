@@ -5,17 +5,18 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "@xstyled/babel-preset-emotion-css-prop": "^1.17.1",
-    "@xstyled/emotion": "^1.17.1",
-    "@xstyled/styled-components": "^1.17.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@xstyled/babel-preset-emotion-css-prop": "^1.17.1",
+    "@xstyled/emotion": "^1.17.1",
+    "@xstyled/styled-components": "^1.17.1",
     "emotion-theming": "^10.0.27",
-    "styled-components": "^5.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.0",
+    "throttle-debounce": "^2.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
