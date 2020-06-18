@@ -6,25 +6,50 @@ on:
       - master
 
 jobs:
-  deploy:
-    name: Deploy
+  build: 
+    name: Build Docker image
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install dependencies
-        run: yarn
+      - name: Build & push Docker image
+        uses: docker/build-push-action@v1
+        with:
+          username: nologin
+          password: ${{ secrets.SCW_SECRET_TOKEN }}
+          repository: rg.fr-par.scw.cloud/tthsympa
+          tags: latest
 
-      - name: Build
-        run: yarn build
+        # run: docker login rg.fr-par.scw.cloud/tthsympa -u nologin -p ${{ secrets.SCW_SECRET_TOKEN }}
+        # run: docker build -t tthsympa/home .
+        # run: docker tag tthsympa/home rg.fr-par.scw.cloud/tthsympa/home
+        # run: docker push rg.fr-par.scw.cloud/tthsympa/home
+  # deploy:
+  #   name: Deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
 
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v2.1.1
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: '-rltgoDzvO'
-          SOURCE: 'build/'
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ secrets.REMOTE_TARGET }}
+  #   steps:
+  #     - uses: actions/checkout@v1
+
+  #     - name: Pulling Docker image
+  #       run: # run: docker login rg.fr-par.scw.cloud/tthsympa -u nologin -p ${{ secrets.SCW_SECRET_TOKEN }}
+  #       # run: docker build -t tthsympa/home .
+  #       # run: docker tag tthsympa/home rg.fr-par.scw.cloud/tthsympa/home
+  #       # run: docker push rg.fr-par.scw.cloud/tthsympa/home
+      # - name: Install dependencies
+      #   run: yarn
+
+      # - name: Build
+      #   run: yarn build
+
+      # - name: Deploy to Server
+      #   uses: easingthemes/ssh-deploy@v2.1.1
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     ARGS: '-rltgoDzvO'
+      #     SOURCE: 'build/'
+      #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+      #     REMOTE_USER: ${{ secrets.REMOTE_USER }}
+      #     TARGET: ${{ secrets.REMOTE_TARGET }}
