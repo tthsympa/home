@@ -39,7 +39,7 @@ jobs:
           command: |
             docker login ${{ env.REGISTRY }}/tthsympa -u nologin -p ${{ env.TOKEN }}
             docker pull ${{ env.REGISTRY }}/tthsympa/home:latest
-            docker run -d -p ${{ env.PORT }}:${{ env.PORT }} tthsympa/home:latest
+            docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ env.REGISTRY }}/tthsympa/home:latest
           host: ${{ secrets.REMOTE_HOST }}
           user: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY}}
