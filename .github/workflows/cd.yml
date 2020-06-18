@@ -32,13 +32,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      env:
-        REGISTRY: $REGISTRY
-        TOKEN: ${{ secrets.SCW_SECRET_TOKEN }}
-        PORT: ${{ secrets.PORT }}
-
       - name: Deploy & run throught SSH
         uses: fifsky/ssh-action@v0.0.4
+        env:
+          REGISTRY: $REGISTRY
+          TOKEN: ${{ secrets.SCW_SECRET_TOKEN }}
+          PORT: ${{ secrets.PORT }}
         with:
           command: |
             docker login ${{ env.REGISTRY }}/tthsympa -u nologin -p ${{ env.TOKEN }}
