@@ -21,7 +21,6 @@ jobs:
           registry: rg.fr-par.scw.cloud
           repository: tthsympa/home
           tags: latest
-          build_args: PORT=${{ secrets.PORT }}
 
   deploy:
     name: Deploy Docker image
@@ -34,7 +33,7 @@ jobs:
         env:
           REGISTRY: rg.fr-par.scw.cloud
           TOKEN: ${{ secrets.SCW_SECRET_TOKEN }}
-          PORT: ${{ secrets.PORT }}
+          PORT: 3000
         with:
           command: |
             docker login ${{ env.REGISTRY }}/tthsympa -u nologin -p ${{ env.TOKEN }}

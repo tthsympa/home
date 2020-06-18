@@ -1,6 +1,6 @@
 FROM node:14.4-stretch as builder
 
-ARG PORT
+# ARG PORT
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,5 +15,5 @@ COPY . .
 
 RUN yarn build
 
-EXPOSE $PORT
-CMD [ "npx", "serve", "-l", $PORT, "build" ]
+EXPOSE 3000
+CMD [ "npx", "serve", "-l", "3000", "build" ]
