@@ -5,9 +5,6 @@ on:
     branches:
       - master
 
-env:
-  REGISTRY: rg.fr-par.scw.cloud
-
 jobs:
   build:
     name: Build Docker image
@@ -21,7 +18,7 @@ jobs:
         with:
           username: nologin
           password: ${{ secrets.SCW_SECRET_TOKEN }}
-          registry: $REGISTRY
+          registry: rg.fr-par.scw.cloud
           repository: tthsympa/home
           tags: latest
           build_args: PORT=${{ secrets.PORT }}
@@ -35,7 +32,7 @@ jobs:
       - name: Deploy & run throught SSH
         uses: fifsky/ssh-action@v0.0.4
         env:
-          REGISTRY: $REGISTRY
+          REGISTRY: rg.fr-par.scw.cloud
           TOKEN: ${{ secrets.SCW_SECRET_TOKEN }}
           PORT: ${{ secrets.PORT }}
         with:
