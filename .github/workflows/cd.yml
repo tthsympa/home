@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build: 
+  build:
     name: Build Docker image
     runs-on: ubuntu-latest
 
@@ -23,35 +23,19 @@ jobs:
           tags: latest
           build_args: PORT=${{ secrets.PORT }}
 
-        # run: docker login rg.fr-par.scw.cloud/tthsympa -u nologin -p ${{ secrets.SCW_SECRET_TOKEN }}
-        # run: docker build -t tthsympa/home .
-        # run: docker tag tthsympa/home rg.fr-par.scw.cloud/tthsympa/home
-        # run: docker push rg.fr-par.scw.cloud/tthsympa/home
-  # deploy:
-  #   name: Deploy
-  #   needs: build
-  #   runs-on: ubuntu-latest
+  deploy:
+    name: Deploy Docker image
+    needs: build
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v1
-
-  #     - name: Pulling Docker image
-  #       run: # run: docker login rg.fr-par.scw.cloud/tthsympa -u nologin -p ${{ secrets.SCW_SECRET_TOKEN }}
-  #       # run: docker build -t tthsympa/home .
-  #       # run: docker tag tthsympa/home rg.fr-par.scw.cloud/tthsympa/home
-  #       # run: docker push rg.fr-par.scw.cloud/tthsympa/home
-      # - name: Install dependencies
-      #   run: yarn
-
-      # - name: Build
-      #   run: yarn build
-
-      # - name: Deploy to Server
-      #   uses: easingthemes/ssh-deploy@v2.1.1
-      #   env:
-      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     ARGS: '-rltgoDzvO'
-      #     SOURCE: 'build/'
-      #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-      #     REMOTE_USER: ${{ secrets.REMOTE_USER }}
-      #     TARGET: ${{ secrets.REMOTE_TARGET }}
+    steps:
+      - name: Deploy & run throught SSH
+        uses: fifsky/ssh-action@v0.0.4
+        with:
+          command: |
+            docker login ${{ env.SCW_REGISTRY }}/tthsympa -u nologin -p ${{ env.SCW_SECRET_TOKEN }}
+            docker pull rg.fr-par.scw.cloud/tthsympa/home:latest
+            docker run -d -p ${{ env.HOME_PORT }}:${{ env.HOME_PORT }} tthsympa/home:latest
+          host: ${{ secrets.REMOTE_HOST }}
+          user: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY}}
