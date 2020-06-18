@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+env:
+  REGISTRY: rg.fr-par.scw.cloud
+
 jobs:
   build:
     name: Build Docker image
@@ -18,7 +21,7 @@ jobs:
         with:
           username: nologin
           password: ${{ secrets.SCW_SECRET_TOKEN }}
-          registry: rg.fr-par.scw.cloud
+          registry: $REGISTRY
           repository: tthsympa/home
           tags: latest
           build_args: PORT=${{ secrets.PORT }}
@@ -29,13 +32,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      env:
+        REGISTRY: $REGISTRY
+        TOKEN: ${{ secrets.SCW_SECRET_TOKEN }}
+        PORT: ${{ secrets.PORT }}
+
       - name: Deploy & run throught SSH
         uses: fifsky/ssh-action@v0.0.4
         with:
           command: |
-            docker login ${{ env.SCW_REGISTRY }}/tthsympa -u nologin -p ${{ env.SCW_SECRET_TOKEN }}
-            docker pull rg.fr-par.scw.cloud/tthsympa/home:latest
-            docker run -d -p ${{ env.HOME_PORT }}:${{ env.HOME_PORT }} tthsympa/home:latest
+            docker login ${{ env.REGISTRY }}/tthsympa -u nologin -p ${{ env.TOKEN }}
+            docker pull ${{ env.REGISTRY }}/tthsympa/home:latest
+            docker run -d -p ${{ env.PORT }}:${{ env.PORT }} tthsympa/home:latest
           host: ${{ secrets.REMOTE_HOST }}
           user: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY}}
