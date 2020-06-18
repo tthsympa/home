@@ -18,7 +18,8 @@ jobs:
         with:
           username: nologin
           password: ${{ secrets.SCW_SECRET_TOKEN }}
-          repository: rg.fr-par.scw.cloud/tthsympa
+          registry: rg.fr-par.scw.cloud
+          repository: tthsympa/home
           tags: latest
 
         # run: docker login rg.fr-par.scw.cloud/tthsympa -u nologin -p ${{ secrets.SCW_SECRET_TOKEN }}
