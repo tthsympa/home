@@ -41,5 +41,5 @@ jobs:
             docker container rm tthsympa_home
             docker run -d --name tthsympa_home -p ${{ env.PORT }}:${{ env.PORT }} ${{ env.REGISTRY }}/tthsympa/home:latest
           host: ${{ secrets.REMOTE_HOST }}
-          user: ${{ secrets.REMOsTE_USER }}
+          user: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY}}
