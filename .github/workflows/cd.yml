@@ -38,6 +38,7 @@ jobs:
           command: |
             docker login ${{ env.REGISTRY }}/tthsympa -u nologin -p ${{ env.TOKEN }}
             docker pull ${{ env.REGISTRY }}/tthsympa/home:latest
+            docker container stop tthsympa_home
             docker container rm tthsympa_home
             docker run -d --name tthsympa_home -p ${{ env.PORT }}:${{ env.PORT }} ${{ env.REGISTRY }}/tthsympa/home:latest
           host: ${{ secrets.REMOTE_HOST }}
