@@ -1,7 +1,4 @@
-/** @jsx jsx */
-
-import { useState, useEffect, useRef } from 'react'
-import { jsx } from '@xstyled/emotion'
+import React, { useState, useEffect, useRef } from 'react'
 import { throttle } from 'throttle-debounce'
 import Container, { ANIMATIONDURATION, animationsLastState } from './styles'
 import { getDragDirection, getRotatingFromDirection } from './helpers'
@@ -153,8 +150,6 @@ function Cube({
     }
   }
 
-  console.log('anim', anim)
-  console.log('destroyed', destroyed)
   return (
     <Container
       onMouseDown={onMouseDown}
