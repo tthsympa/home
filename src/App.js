@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
-import styled from '@xstyled/styled-components'
+import styled, { Box } from '@xstyled/styled-components'
 import Cube from './Cube'
 import Slot from './Slot'
 import Works from './Works'
@@ -14,36 +14,14 @@ const shades = [
   colors.brightSun,
 ]
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: ${colors.dew};
-`
-const Content = styled.div.attrs(({ shouldReveal }) => ({
-  style: {
-    backgroundColor: shouldReveal ? colors.pastel : colors.indigo,
-    height: shouldReveal ? '800px' : '500px',
-    width: shouldReveal ? '800px' : '500px',
-    justifyContent: shouldReveal ? 'flex-start' : 'center',
-    alignItems: shouldReveal ? 'flex-start' : 'center',
-  },
-}))`
-  display: flex;
-  transition: height 500ms ease-in, width 500ms ease-in,
-    background-color 500ms ease-in;
-`
-
 const hints = ['🚪', '🗝', '🤏']
 
-const NB = 10
+const CUBES_NUMBER = 10
 
 function getRandomIndex(indexes = []) {
   if (indexes.length <= 2) {
-    const row = Math.floor(Math.random() * NB)
-    const column = Math.floor(Math.random() * NB)
+    const row = Math.floor(Math.random() * CUBES_NUMBER)
+    const column = Math.floor(Math.random() * CUBES_NUMBER)
 
     if (indexes.some(([r, c]) => r === row && c === column)) {
       return getRandomIndex(indexes)
@@ -54,14 +32,19 @@ function getRandomIndex(indexes = []) {
   return indexes
 }
 
+function valueFromPercentage(percent, value) {
+  return (percent / 100) * value
+}
+
 function App() {
+  const ref = useRef()
+
+  const [ezMode, setEzMode] = useState(false)
+  const [hintsFound, addFoundHint] = useState([])
   const [dimension, setDimension] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   })
-  const [hintsFound, addFoundHint] = useState([])
-
-  const ref = useRef()
 
   const indexes = useMemo(getRandomIndex, [getRandomIndex])
 
@@ -73,10 +56,6 @@ function App() {
       })
     }
   }, [])
-
-  function percentage(percent, value) {
-    return (percent / 100) * value
-  }
 
   function determineColor(rIndex, sqrIndex) {
     if (rIndex === 0 || sqrIndex === 0) {
@@ -111,15 +90,16 @@ function App() {
     }
   }
 
-  const shouldReveal = hintsFound.length === 3
+  const shouldRevealWorks = hintsFound.length === 3
+
   return (
     <Container>
       <Content
         ref={ref}
         style={{ position: 'relative' }}
-        shouldReveal={shouldReveal}
+        shouldReveal={shouldRevealWorks}
       >
-        {shouldReveal ? (
+        {shouldRevealWorks ? (
           <Works />
         ) : (
           <>
@@ -141,11 +121,15 @@ function App() {
                 />
               ))}
             </div>
-            <div style={{ width: '300px', height: '300px', padding: '0px' }}>
+            <Box width={300} height={300} p={0}>
               {ref.current
-                ? Array.from({ length: NB }).map((_, rowIndex) => {
-                    const height = Math.round(percentage(10, dimension.height))
-                    const width = Math.round(percentage(10, dimension.width))
+                ? Array.from({ length: CUBES_NUMBER }).map((_, rowIndex) => {
+                    const height = Math.round(
+                      valueFromPercentage(10, dimension.height)
+                    )
+                    const width = Math.round(
+                      valueFromPercentage(10, dimension.width)
+                    )
                     return (
                       <div
                         key={rowIndex}
@@ -154,39 +138,75 @@ function App() {
                           height: height,
                         }}
                       >
-                        {Array.from({ length: NB }).map((_, index) => {
-                          const hintIndex = indexes.findIndex(
-                            ([r, c]) => r === rowIndex && c === index
-                          )
-                          const hint =
-                            hintIndex > -1 ? hints[hintIndex] : undefined
-                          const {
-                            left,
-                            top,
-                          } = ref.current.getBoundingClientRect()
-                          return (
-                            <Cube
-                              key={`${rowIndex}-${index}`}
-                              width={width}
-                              height={height}
-                              color={determineColor(rowIndex, index)}
-                              hint={hint}
-                              coordinates={[rowIndex, index]}
-                              offset={[100, 100]}
-                              cx={[left, top]}
-                            />
-                          )
-                        })}
+                        {Array.from({ length: CUBES_NUMBER }).map(
+                          (_, index) => {
+                            const hintIndex = indexes.findIndex(
+                              ([r, c]) => r === rowIndex && c === index
+                            )
+                            const hint =
+                              hintIndex > -1 ? hints[hintIndex] : undefined
+                            const {
+                              left,
+                              top,
+                            } = ref.current.getBoundingClientRect()
+                            return (
+                              <Cube
+                                key={`${rowIndex}-${index}`}
+                                width={width}
+                                height={height}
+                                color={determineColor(rowIndex, index)}
+                                hint={hint}
+                                coordinates={[rowIndex, index]}
+                                offset={[100, 100]}
+                                cx={[left, top]}
+                                isEz={ezMode}
+                              />
+                            )
+                          }
+                        )}
                       </div>
                     )
                   })
                 : null}
-            </div>
+            </Box>
           </>
         )}
       </Content>
+      {!shouldRevealWorks && (
+        <Box position="absolute" bottom={30} left={30} display="flex">
+          <input
+            type="checkbox"
+            value={ezMode}
+            onChange={() => setEzMode(!ezMode)}
+          />
+          <Box as="span" ml={1}>
+            ez
+          </Box>
+        </Box>
+      )}
     </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: ${colors.dew};
+`
+const Content = styled.div.attrs(({ shouldReveal }) => ({
+  style: {
+    backgroundColor: shouldReveal ? colors.pastel : colors.indigo,
+    height: shouldReveal ? '800px' : '500px',
+    width: shouldReveal ? '800px' : '500px',
+    justifyContent: shouldReveal ? 'flex-start' : 'center',
+    alignItems: shouldReveal ? 'flex-start' : 'center',
+  },
+}))`
+  display: flex;
+  transition: height 500ms ease, width 500ms ease, background-color 500ms ease;
+`
 
 export default App

@@ -105,6 +105,7 @@ const Container = styled.div`
   left: ${(props) => props.offset[0] + 30 * props.coordinates[1]}px;
   top: ${(props) => props.offset[1] + 30 * props.coordinates[0]}px;
   width: ${(props) => props.width}px;
+  height: ${(props) => props.width}px;
   margin: 0 auto;
   transform-style: preserve-3d;
   transition: transform 550ms ease, opacity 1000ms ease-out;
@@ -130,7 +131,7 @@ const Container = styled.div`
     css`
       :hover,
       :focus {
-        transform: translate3d(-4px, -2px, 0);
+        transform: translate3d(-5px, -2px, 0);
       }
     `}
   ${(props) =>

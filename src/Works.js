@@ -2,51 +2,6 @@ import React from 'react'
 import styled, { Box } from '@xstyled/styled-components'
 import { bigStone, indigo, pickledBluewood, trendyPink } from './colors'
 
-const Container = styled.div`
-  padding: 50px 50px 0px;
-  width: 100%;
-`
-
-const Content = styled.div`
-  width: 100%;
-  position: relative;
-`
-
-const Name = styled.h4`
-  font-size: 22px;
-  color: ${bigStone};
-  margin: 0;
-  width: 150px;
-  transition: font-size 200ms ease;
-`
-const Description = styled.p`
-  font-size: 16px;
-  color: ${pickledBluewood};
-  margin-top: 4px;
-  margin: 0;
-`
-const Technos = styled.p`
-  font-size: 16px;
-  color: ${indigo};
-  margin-left: 32px;
-  margin: 0;
-`
-const Misc = styled.div`
-  position: absolute;
-  width: 50px;
-  text-align: center;
-  top: 0;
-  left: -50px;
-`
-
-const Separator = styled.div`
-  height: 1px;
-  width: 24px;
-  border-bottom: 1px dashed ${trendyPink};
-  margin-bottom: 24px;
-  margin-top: 8px;
-`
-
 const works = [
   {
     name: 'Home',
@@ -92,22 +47,23 @@ function Work({ name, descriptions, technos, links, misc }) {
         <Name>{name}</Name>
         <Technos>{technos}</Technos>
       </Box>
-      {descriptions.map((description) => (
-        <Description>- {description}</Description>
+      {descriptions.map((description, index) => (
+        <Description key={`work-desc-${index}`}>- {description}</Description>
       ))}
       <Box ml={3}>
         {links.map(({ label, link }, index) => (
-          <>
+          <React.Fragment key={`work-link-${index}`}>
             <Box as="a" href={link} color={pickledBluewood} target="__blank">
               {label}
             </Box>
             {index !== links.length - 1 && `-`}
-          </>
+          </React.Fragment>
         ))}
       </Box>
     </Content>
   )
 }
+
 function Works() {
   return (
     <Container>
@@ -120,5 +76,50 @@ function Works() {
     </Container>
   )
 }
+
+const Container = styled.div`
+  padding: 50px 50px 0px;
+  width: 100%;
+`
+
+const Content = styled.div`
+  width: 100%;
+  position: relative;
+`
+
+const Name = styled.h4`
+  font-size: 22px;
+  color: ${bigStone};
+  margin: 0;
+  width: 150px;
+  transition: font-size 200ms ease;
+`
+const Description = styled.p`
+  font-size: 16px;
+  color: ${pickledBluewood};
+  margin-top: 4px;
+  margin: 0;
+`
+const Technos = styled.p`
+  font-size: 16px;
+  color: ${indigo};
+  margin-left: 32px;
+  margin: 0;
+`
+const Misc = styled.div`
+  position: absolute;
+  width: 50px;
+  text-align: center;
+  top: 0;
+  left: -50px;
+`
+
+const Separator = styled.div`
+  height: 1px;
+  width: 24px;
+  border-bottom: 1px dashed ${trendyPink};
+  margin-bottom: 24px;
+  margin-top: 8px;
+`
 
 export default Works

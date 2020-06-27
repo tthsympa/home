@@ -16,20 +16,13 @@ function Cube({
   coordinates = [],
   offset = [],
   cx = [],
+  isEz = false,
 }) {
   const [anim, setAnim] = useState()
   const [isDraggable, setDrag] = useState()
   const [destroyed, destroy] = useState()
   const ref = useRef()
   const hasHint = Boolean(hint)
-
-  useEffect(() => {
-    if (anim === 'reveal') {
-      setTimeout(() => {
-        setAnim('')
-      }, ANIMATIONDURATION)
-    }
-  }, [anim, setAnim])
 
   function onMouseDown(e) {
     if (isDraggable) {
@@ -150,19 +143,34 @@ function Cube({
     }
   }
 
+  function onClick() {
+    if (!anim || !isDraggable) {
+      if (hasHint) {
+        setAnim('found')
+      } else {
+        setAnim('reveal')
+      }
+    }
+  }
+
+  function onEnter() {
+    if (isEz) onClick()
+  }
+
+  useEffect(() => {
+    if (anim === 'reveal') {
+      setTimeout(() => {
+        setAnim('')
+      }, ANIMATIONDURATION)
+    }
+  }, [anim, setAnim])
+
   return (
     <Container
-      onMouseDown={onMouseDown}
       ref={ref}
-      onClick={() => {
-        if (!anim || !isDraggable) {
-          if (hasHint) {
-            setAnim('found')
-          } else {
-            setAnim('reveal')
-          }
-        }
-      }}
+      onMouseEnter={onEnter}
+      onMouseDown={onMouseDown}
+      onClick={onClick}
       onAnimationEnd={() => {
         if (hasHint && !destroyed) setDrag(true)
       }}
@@ -227,4 +235,4 @@ function Cube({
   )
 }
 
-export default Cube
+export default React.memo(Cube)
