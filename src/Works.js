@@ -18,11 +18,14 @@ const works = [
     name: 'Seeblock',
     descriptions: [
       'Ethereum blockchain visualisator',
-      'Display transactions of inputted address',
+      'Display transactions of inputted address/block',
       'Point transactions to have more infos on it',
     ],
     technos: 'React, THREE, Blockchain',
-    links: [{ link: 'https://github.com/tthsympa/seeblock', label: 'github' }],
+    links: [
+      { link: 'https://seeblock.tthsympa.com', label: 'demo' },
+      { link: 'https://github.com/tthsympa/seeblock', label: 'github' },
+    ],
     misc: '🔗 💰',
   },
   {
@@ -53,10 +56,16 @@ function Work({ name, descriptions, technos, links, misc }) {
       <Box ml={3}>
         {links.map(({ label, link }, index) => (
           <React.Fragment key={`work-link-${index}`}>
-            <Box as="a" href={link} color={pickledBluewood} target="__blank">
+            <Box
+              as="a"
+              href={link}
+              color={pickledBluewood}
+              target="__blank"
+              rel="noopener noreferrer"
+            >
               {label}
             </Box>
-            {index !== links.length - 1 && `-`}
+            {index !== links.length - 1 && ` - `}
           </React.Fragment>
         ))}
       </Box>
