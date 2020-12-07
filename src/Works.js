@@ -39,6 +39,20 @@ const works = [
     links: [{ link: 'https://github.com/tthsympa/mimique', label: 'github' }],
     misc: '🎓',
   },
+  {
+    name: 'Slot',
+    descriptions: [
+      'Book a slot and be organized!',
+      'Just a simple calendar app',
+      'WIP, must be connected to API',
+    ],
+    technos: 'React, Chakra UI, BigCalendar',
+    links: [
+      { link: 'https://slot.tthsympa.com', label: 'demo' },
+      { link: 'https://github.com/tthsympa/slot', label: 'github' },
+    ],
+    misc: '🗓 🏗',
+  },
   // To complete
 ]
 
