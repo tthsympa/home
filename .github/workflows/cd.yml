@@ -3,57 +3,40 @@ name: Node CI
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
-    name: Build Docker image
+    name: Build & Push Docker image
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to Docker registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: nologin
-          password: ${{ secrets.SCW_SECRET_TOKEN }}
+          password: ${{ secrets.TTHSYMPA_SCW_SECRET_KEY }}
           registry: rg.fr-par.scw.cloud
 
       - name: Build & push Docker image
-        uses: docker/build-push-action@v2
-        env:
-          REGISTRY: rg.fr-par.scw.cloud
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
           load: true
-          tags: ${{ env.REGISTRY }}/tthsympa/home:latest
+          tags: rg.fr-par.scw.cloud/tthsympa/home:latest
       - run: docker push rg.fr-par.scw.cloud/tthsympa/home:latest
 
   deploy:
-    name: Deploy Docker image
+    name: Deploy Container
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy & run throught SSH
-        uses: fifsky/ssh-action@v0.0.4
-        env:
-          REGISTRY: rg.fr-par.scw.cloud
-          TOKEN: ${{ secrets.SCW_SECRET_TOKEN }}
-          PORT: 3000
-        with:
-          command: |
-            docker login ${{ env.REGISTRY }}/tthsympa -u nologin -p ${{ env.TOKEN }}
-            docker pull ${{ env.REGISTRY }}/tthsympa/home:latest
-            docker container stop tthsympa_home
-            docker container rm tthsympa_home
-            docker run -d --name tthsympa_home -p ${{ env.PORT }}:${{ env.PORT }} ${{ env.REGISTRY }}/tthsympa/home:latest
-          host: ${{ secrets.REMOTE_HOST }}
-          user: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY}}
+      - name: Trigger deploy
+        run: |
+          curl -X POST -H 'X-Auth-Token: ${{ secrets.TTHSYMPA_SCW_SECRET_KEY }}' 'https://api.scaleway.com/containers/v1beta1/regions/fr-par/containers/82ccaa10-4f27-4c75-af3b-d86620f83fb0/deploy' -d '{}'
+
