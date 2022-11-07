@@ -1,4 +1,4 @@
-FROM node:14.4-stretch as builder
+FROM node:16 as builder
 
 # ARG PORT
 
