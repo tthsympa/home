@@ -25,7 +25,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
           load: true
           tags: rg.fr-par.scw.cloud/tthsympa/home:latest
       - run: docker push rg.fr-par.scw.cloud/tthsympa/home:latest
