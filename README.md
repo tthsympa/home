@@ -1,6 +1,6 @@
 ## Home
 
-Home of [tth](tthsympa.com) website. Just a ~~funny~~ useless place where squares rolls!
+Home of [tth](https://tthsympa.com) website. Just a ~~funny~~ useless place where squares rolls!
 
 ## Local
 
