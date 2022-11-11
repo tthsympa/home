@@ -31,6 +31,7 @@ const works = [
   {
     name: 'Mimique',
     descriptions: [
+      '--- OUTDATED',
       'Events aggregator with personalised proposal',
       'End-of-studies mobile app (© friends & me)',
       'Not working anymore, only nostalgia',
@@ -42,13 +43,13 @@ const works = [
   {
     name: 'Slot',
     descriptions: [
+      '--- OUTDATED',
       'Book a slot and be organized!',
       'Just a simple calendar app',
       'WIP, must be connected to API',
     ],
     technos: 'React, Chakra UI, BigCalendar',
     links: [
-      { link: 'https://slot.tthsympa.com', label: 'demo' },
       { link: 'https://github.com/tthsympa/slot', label: 'github' },
     ],
     misc: '🗓 🏗',
